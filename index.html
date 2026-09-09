@@ -1,0 +1,663 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SkillBridge | Academia × Industry</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;font-family:Inter,Arial,sans-serif;background:#f5f7fb;color:#172033}
+button,input,select,textarea{font:inherit}
+button{cursor:pointer}
+.topbar{background:#fff;border-bottom:1px solid #e6eaf0;position:sticky;top:0;z-index:20}
+.topbar-inner{max-width:1150px;margin:auto;padding:15px 20px;display:flex;align-items:center;justify-content:space-between;gap:20px}
+.brand{font-weight:900;font-size:21px;color:#1d4ed8}
+.brand small{display:block;font-size:10px;color:#7b8494;letter-spacing:.8px}
+.container{max-width:1150px;margin:auto;padding:30px 20px 70px}
+.screen{display:none}
+.screen.active{display:block}
+.hero{background:linear-gradient(135deg,#1d4ed8,#4338ca);color:#fff;border-radius:24px;padding:32px;margin-bottom:22px}
+.hero h1{margin:0 0 9px;font-size:32px}
+.hero p{margin:0;opacity:.92;line-height:1.6}
+.card{background:#fff;border:1px solid #e4e8ef;border-radius:18px;padding:22px;margin-bottom:18px;box-shadow:0 5px 18px rgba(17,24,39,.05)}
+h2{margin:0 0 8px} h3{margin:0 0 7px}
+.muted{color:#667085;line-height:1.5}
+.form-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:16px}
+.field label{display:block;font-weight:750;margin-bottom:7px;font-size:14px}
+.field input,.field select,.field textarea{width:100%;padding:12px;border:1px solid #d5dbe5;border-radius:10px;background:#fff;outline:none}
+.field input:focus,.field select:focus,.field textarea:focus{border-color:#4f46e5}
+.field textarea{min-height:90px;resize:vertical}
+.full{grid-column:1/-1}
+.actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:20px}
+.btn{border:0;border-radius:10px;padding:12px 17px;font-weight:800}
+.btn-primary{background:#1d4ed8;color:#fff}.btn-secondary{background:#eef2f7;color:#253047}
+.btn-green{background:#059669;color:#fff}.btn-purple{background:#7c3aed;color:#fff}.btn-orange{background:#ea580c;color:#fff}
+.error{color:#b42318;background:#fff1f0;border:1px solid #fecaca;padding:11px;border-radius:10px;margin-top:14px;display:none}
+.success{color:#166534;background:#ecfdf3;border:1px solid #bbf7d0;padding:12px;border-radius:10px;margin-top:14px}
+.menu-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:18px;margin-top:20px}
+.menu-card{border:1px solid #dfe5ee;background:#fff;border-radius:18px;padding:23px;text-align:left;min-height:185px;box-shadow:0 5px 18px rgba(17,24,39,.05);transition:.15s}
+.menu-card:hover{transform:translateY(-2px);box-shadow:0 9px 25px rgba(17,24,39,.1)}
+.icon{font-size:30px;margin-bottom:10px}.menu-card p{color:#667085;line-height:1.5;min-height:55px}.menu-card span{font-weight:850}
+.skill-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.skill{border:1px solid #e0e5ec;border-radius:12px;padding:13px}
+.skill strong{display:block;margin-bottom:5px}.score{font-size:13px;color:#667085}
+.bar{height:8px;background:#e9edf3;border-radius:20px;overflow:hidden;margin-top:8px}.bar i{display:block;height:100%;background:#4f46e5}
+.table{width:100%;border-collapse:collapse;margin-top:14px}.table th,.table td{padding:11px;border-bottom:1px solid #edf0f4;text-align:left;font-size:14px}.table th{background:#f8fafc}
+.badge{display:inline-block;padding:5px 9px;border-radius:20px;background:#eef2ff;color:#4338ca;font-size:12px;font-weight:800}
+.resource{border:1px solid #e1e6ee;border-radius:12px;padding:13px;margin:9px 0}
+.resource a{color:#1d4ed8;font-weight:750;text-decoration:none}
+.notice{background:#fffbeb;border:1px solid #fde68a;border-radius:12px;padding:13px;color:#92400e}
+.back{margin-bottom:15px}
+.small{font-size:13px}
+.profile-chip{display:flex;gap:9px;align-items:center;font-size:13px;color:#667085}
+@media(max-width:760px){.form-grid,.menu-grid{grid-template-columns:1fr}.skill-grid{grid-template-columns:1fr}.hero h1{font-size:26px}}
+</style>
+</head>
+<body>
+<header class="topbar">
+  <div class="topbar-inner">
+    <div class="brand">SkillBridge <small>ACADEMIA × INDUSTRY</small></div>
+    <div id="profileChip" class="profile-chip"></div>
+  </div>
+</header>
+
+<main class="container">
+
+<!-- PROFILE -->
+<section id="profileScreen" class="screen active">
+  <div class="hero">
+    <h1>Build Your Career Readiness</h1>
+    <p>Tell SkillBridge your career goal and current background. We will guide you through skill verification, gap analysis, learning and opportunities.</p>
+  </div>
+  <div class="card">
+    <h2>Student Profile</h2>
+    <p class="muted">Complete your profile first. Then you can choose exactly which part of SkillBridge you want to explore.</p>
+    <form id="profileForm" novalidate>
+      <div class="form-grid">
+        <div class="field">
+          <label for="name">Full Name *</label>
+          <input id="name" type="text" placeholder="Enter your name" autocomplete="name">
+        </div>
+        <div class="field">
+          <label for="education">Education / Branch *</label>
+          <input id="education" type="text" placeholder="e.g. B.Tech CSE">
+        </div>
+        <div class="field full">
+          <label for="careerGoal">Career Goal *</label>
+          <select id="careerGoal">
+            <option value="">Select your career goal</option>
+            <option>Software Developer</option><option>Frontend Developer</option>
+            <option>Backend Developer</option><option>Full Stack Developer</option>
+            <option>AI / ML Engineer</option><option>Data Scientist</option>
+            <option>Data Analyst</option><option>Data Engineer</option>
+            <option>Cybersecurity Analyst</option><option>Cloud Engineer</option>
+            <option>DevOps Engineer</option><option>Mobile App Developer</option>
+            <option>Blockchain Developer</option><option>Game Developer</option>
+            <option>Embedded Systems Engineer</option><option>VLSI Design Engineer</option>
+            <option>Electrical Engineer</option><option>Mechanical Design Engineer</option>
+            <option>Robotics Engineer</option><option>UI/UX Designer</option>
+            <option>Product Manager</option><option>Business Analyst</option>
+            <option>Digital Marketing Specialist</option><option>Finance Analyst</option>
+          </select>
+        </div>
+        <div class="field full">
+          <label for="goalDetails">Career Goal Details (optional)</label>
+          <textarea id="goalDetails" placeholder="Example: I want to become a backend developer and get an internship in a product company."></textarea>
+        </div>
+      </div>
+      <div id="profileError" class="error"></div>
+      <div class="actions">
+        <button id="profileSubmitBtn" class="btn btn-primary" type="submit">Save Profile & Continue →</button>
+        <button id="profileCancelBtn" class="btn btn-secondary" type="button" style="display:none">Cancel</button>
+      </div>
+    </form>
+  </div>
+</section>
+
+<!-- MENU -->
+<section id="menuScreen" class="screen">
+  <div class="hero">
+    <h1 id="welcomeTitle">Welcome to SkillBridge</h1>
+    <p>Your profile is saved. Choose where you want to go.</p>
+  </div>
+  <div class="card">
+    <h2>SkillBridge Main Menu</h2>
+    <p class="muted">Tap any module below. Nothing is forced—you decide what you want to explore.</p>
+    <div class="menu-grid">
+      <button class="menu-card" data-go="student" type="button">
+        <div class="icon">🎓</div><h3>Student Skill Journey</h3>
+        <p>Current skills, assessments, skill-gap analysis, learning resources and final test.</p>
+        <span>Open Student Journey →</span>
+      </button>
+      <button class="menu-card" data-go="academic" type="button">
+        <div class="icon">👩‍🏫</div><h3>Academician Hub</h3>
+        <p>Compare industry-demand skills with student skills and identify workshop priorities.</p>
+        <span>Open Academician Hub →</span>
+      </button>
+      <button class="menu-card" data-go="jobs" type="button">
+        <div class="icon">💼</div><h3>Jobs & Internships</h3>
+        <p>Jobs & internships unlock only after the Final Test confirms every required skill meets the SkillBridge benchmark.</p>
+        <span>Open Opportunities →</span>
+      </button>
+      <button class="menu-card" data-go="industry" type="button">
+        <div class="icon">🏢</div><h3>Industry View</h3>
+        <p>Explore employer categories and role-wise skills industries commonly seek.</p>
+        <span>Open Industry View →</span>
+      </button>
+    </div>
+    <div class="actions" style="margin-top:18px">
+      <button id="editProfileBtn" class="btn btn-secondary" type="button">✏️ Edit Profile</button>
+    </div>
+  </div>
+</section>
+
+<!-- STUDENT -->
+<section id="studentScreen" class="screen">
+  <button class="btn btn-secondary back" data-back type="button">← Main Menu</button>
+  <div class="card">
+    <h2>🎓 Student Skill Journey</h2>
+    <p id="studentSummary" class="muted"></p>
+  </div>
+  <div class="card">
+    <h3>1. Current Skills</h3>
+    <p class="muted">Select the skills you currently have. The FIRST assessment will test ONLY the skills you select. Selection alone does not verify proficiency.</p>
+    <div id="skillSelector" class="skill-grid"></div>
+    <div class="actions"><button id="saveSkills" class="btn btn-primary" type="button">Save Current Skills</button></div>
+    <div id="skillSaveMsg"></div>
+  </div>
+  <div class="card">
+    <h3>2. Skill Assessment</h3>
+    <p class="muted">Take the assessment to turn selected skills into verified scores. ONLY selected skills are tested in the first assessment.</p>
+    <div id="assessmentBox"></div>
+    <div class="actions"><button id="startAssessment" class="btn btn-purple" type="button">Start Assessment</button></div>
+  </div>
+  <div class="card">
+    <h3>3. Skill Gap</h3>
+    <div id="gapBox"></div>
+  </div>
+  <div class="card">
+    <h3>4. Learning Resources</h3>
+    <p class="muted">Resources are recommended only for skills where a gap is identified.</p>
+    <div id="learningBox"></div>
+  </div>
+  <div class="card">
+    <h3>5. Final Test</h3>
+    <p class="muted">After learning, retest your gap skills. Passing the SkillBridge benchmark unlocks opportunities.</p>
+    <div id="finalBox"></div>
+    <div class="actions"><button id="startFinal" class="btn btn-green" type="button">Start Final Test</button></div>
+  </div>
+</section>
+
+<!-- ACADEMICIAN -->
+<section id="academicScreen" class="screen">
+  <button class="btn btn-secondary back" data-back type="button">← Main Menu</button>
+  <div class="hero">
+    <h1>👩‍🏫 Academician Hub</h1>
+    <p>Industry demand → student skill comparison → priority gaps → workshops → reassessment.</p>
+  </div>
+  <div class="card">
+    <h2>Industry Demand vs Student Skills</h2>
+    <p class="muted">Prototype demand index. In production, this can be connected to authorised job-market data.</p>
+    <div id="demandTable"></div>
+  </div>
+  <div class="card">
+    <h2>Priority Workshops</h2>
+    <p class="muted">Highest-gap skills become teaching/workshop priorities.</p>
+    <div id="workshops"></div>
+  </div>
+</section>
+
+<!-- JOBS -->
+<section id="jobsScreen" class="screen">
+  <button class="btn btn-secondary back" data-back type="button">← Main Menu</button>
+  <div class="hero">
+    <h1>💼 Jobs & Internships</h1>
+    <p>Opportunities should be matched using verified skills and live/authorised opportunity sources.</p>
+  </div>
+  <div id="readinessNotice" class="notice"></div>
+  <div class="card">
+    <h2>Opportunity Sources</h2>
+    <div class="resource"><strong>Google job search</strong><br><span class="small">Use a current web search to find openings relevant to your career goal.</span><br><a id="googleJobs" target="_blank" rel="noopener">Search current opportunities →</a></div>
+    <div class="resource"><strong>LinkedIn Jobs</strong><br><span class="small">Search roles matching your selected career goal.</span><br><a id="linkedinJobs" target="_blank" rel="noopener">Search LinkedIn Jobs →</a></div>
+    <div class="resource"><strong>AICTE / FutureSkills-style internship sources</strong><br><span class="small">Production deployment can connect approved internship feeds/APIs here.</span></div>
+  </div>
+</section>
+
+<!-- INDUSTRY -->
+<section id="industryScreen" class="screen">
+  <button class="btn btn-secondary back" data-back type="button">← Main Menu</button>
+  <div class="hero">
+    <h1>🏢 Industry View</h1>
+    <p>See companies, the job/role, and the skills commonly required for that role.</p>
+  </div>
+  <div class="card">
+    <h2>Company → Job → Required Skills</h2>
+    <p class="muted">This is an industry skill catalogue. It does not claim that every listed company currently has an opening.</p>
+    <input id="industrySearch" type="text" placeholder="Search company, job or skill..." style="width:100%;padding:12px;border:1px solid #d5dbe5;border-radius:10px">
+    <div id="industryTable"></div>
+  </div>
+</section>
+
+</main>
+
+<script>
+(function(){
+"use strict";
+
+const careerSkills={
+"Software Developer":["Python","Java","JavaScript","HTML/CSS","SQL","Git","Data Structures","Algorithms","OOP","Communication"],
+"Frontend Developer":["HTML/CSS","JavaScript","React","TypeScript","Git","UI/UX","Communication"],
+"Backend Developer":["Python","Java","Node.js","SQL","APIs","Git","OOP","Data Structures"],
+"Full Stack Developer":["HTML/CSS","JavaScript","React","Node.js","SQL","Git","APIs","Communication"],
+"AI / ML Engineer":["Python","Machine Learning","Deep Learning","SQL","Statistics","Git","Cloud","Communication"],
+"Data Scientist":["Python","SQL","Statistics","Machine Learning","Data Visualization","Communication"],
+"Data Analyst":["Python","SQL","Excel","Statistics","Power BI","Data Visualization","Communication"],
+"Data Engineer":["Python","SQL","Spark","ETL","Cloud","Data Warehousing","Git"],
+"Cybersecurity Analyst":["Networking","Linux","Python","Cybersecurity","Cryptography","SIEM","Communication"],
+"Cloud Engineer":["Linux","Networking","Cloud","Python","Git","Docker","Kubernetes"],
+"DevOps Engineer":["Linux","Git","Cloud","Docker","Kubernetes","CI/CD","Python"],
+"Mobile App Developer":["Java","Kotlin","Flutter","Dart","Git","UI/UX","APIs"],
+"Blockchain Developer":["JavaScript","Solidity","Blockchain","Cryptography","Web Development","Git"],
+"Game Developer":["C#","Unity","3D Mathematics","OOP","Git","Game Design"],
+"Embedded Systems Engineer":["C","C++","Microcontrollers","Embedded Linux","Electronics","RTOS"],
+"VLSI Design Engineer":["Digital Electronics","Verilog","VHDL","Computer Architecture","Semiconductor Basics"],
+"Electrical Engineer":["Circuit Theory","Power Systems","Electrical Machines","Control Systems","MATLAB"],
+"Mechanical Design Engineer":["CAD","SolidWorks","Engineering Drawing","Materials","Manufacturing"],
+"Robotics Engineer":["Python","C++","ROS","Control Systems","Computer Vision","Electronics"],
+"UI/UX Designer":["UI Design","UX Research","Figma","Prototyping","Communication"],
+"Product Manager":["Product Strategy","Market Research","Analytics","Communication","Leadership"],
+"Business Analyst":["SQL","Excel","Business Analysis","Data Visualization","Communication"],
+"Digital Marketing Specialist":["SEO","Content Marketing","Analytics","Social Media","Communication"],
+"Finance Analyst":["Excel","Financial Analysis","Accounting","Data Visualization","Communication"]
+};
+
+const demand={
+"AI / Generative AI":90,"Python":86,"SQL":82,"Cloud":84,"Cybersecurity":83,"Java":76,
+"JavaScript":78,"React":74,"Git":78,"Docker":76,"Kubernetes":79,"Data Engineering":77,
+"RAG / Vector Search":80,"LLM / GenAI":88,"Communication":84,"Analytical Thinking":82,"Automation":78
+};
+
+const employers=[
+["TCS","Software Developer","Java, Python, SQL, Git, Data Structures"],
+["TCS","Data Analyst","SQL, Python, Excel, Power BI, Statistics"],
+["Infosys","Software Developer","Java, Python, SQL, Git, OOP"],
+["Infosys","Cloud Engineer","Cloud, Linux, Networking, Docker, Kubernetes"],
+["Wipro","Backend Developer","Java, Python, Node.js, SQL, APIs, Git"],
+["Wipro","Cybersecurity Analyst","Networking, Linux, Cybersecurity, SIEM"],
+["HCLTech","Cloud Engineer","Cloud, Linux, Networking, Docker, Kubernetes"],
+["HCLTech","Software Developer","Java, Python, SQL, Git, OOP"],
+["Cognizant","Data Scientist","Python, SQL, Statistics, Machine Learning"],
+["Cognizant","Full Stack Developer","HTML/CSS, JavaScript, React, Node.js, SQL, Git"],
+["Accenture","AI / ML Engineer","Python, Machine Learning, Deep Learning, SQL, Cloud"],
+["Accenture","Business Analyst","SQL, Excel, Business Analysis, Data Visualization"],
+["Capgemini","Software Developer","Java, Python, JavaScript, SQL, Git"],
+["Capgemini","Data Engineer","Python, SQL, ETL, Cloud, Data Warehousing"],
+["Tech Mahindra","Software Developer","Java, Python, JavaScript, SQL, Git"],
+["LTIMindtree","Data Engineer","Python, SQL, ETL, Cloud, Git"],
+["Mphasis","Backend Developer","Java, Python, Node.js, SQL, APIs"],
+["Persistent Systems","Full Stack Developer","JavaScript, React, Node.js, SQL, Git, APIs"],
+["Coforge","Data Analyst","SQL, Python, Excel, Statistics, Data Visualization"],
+["Oracle","Software Developer","Java, SQL, APIs, Git, Data Structures"],
+["Oracle","Cloud Engineer","Cloud, Linux, Networking, Kubernetes, Docker"],
+["Microsoft","Software Engineer","C++, C#, Python, Data Structures, Algorithms, Git"],
+["Microsoft","AI / ML Engineer","Python, Machine Learning, Deep Learning, Cloud"],
+["Google","Software Engineer","Python, C++, Java, Data Structures, Algorithms"],
+["Google","Data Scientist","Python, SQL, Statistics, Machine Learning"],
+["Amazon","Software Development Engineer","Java, Python, Data Structures, Algorithms, AWS"],
+["Amazon","Cloud / DevOps Engineer","AWS, Linux, Docker, Kubernetes, CI/CD"],
+["IBM","AI / ML Engineer","Python, Machine Learning, Deep Learning, Cloud"],
+["IBM","Cybersecurity Analyst","Networking, Linux, Cybersecurity, SIEM"],
+["Salesforce","Frontend Developer","JavaScript, React, HTML/CSS, APIs, Git"],
+["SAP","Software Developer","Java, SQL, Cloud, APIs"],
+["Adobe","Frontend Developer","JavaScript, React, HTML/CSS, UI/UX"],
+["ServiceNow","Software Developer","JavaScript, APIs, SQL, Cloud"],
+["Cisco","Network Engineer","Networking, Linux, Cybersecurity, Cloud"],
+["NVIDIA","AI / ML Engineer","Python, C++, Deep Learning, Computer Vision"],
+["Intel","Embedded Systems Engineer","C, C++, Microcontrollers, Embedded Linux"],
+["Qualcomm","Embedded Systems Engineer","C, C++, Embedded Systems, Electronics"],
+["Zoho","Software Developer","Java, JavaScript, SQL, Git, APIs"],
+["Freshworks","Full Stack Developer","JavaScript, React, Node.js, SQL, APIs"],
+["Flipkart","Software Developer","Java, Python, SQL, Data Structures, Cloud"],
+["Walmart Global Tech","Data Engineer","Python, SQL, ETL, Cloud, Data Warehousing"],
+["Paytm","Backend Developer","Java, Python, APIs, SQL, Cloud"],
+["PhonePe","Backend Developer","Java, Python, APIs, SQL, Cloud"],
+["Razorpay","Backend Developer","Java, Python, APIs, SQL, Cybersecurity"],
+["JPMorgan Chase","Software Developer","Java, Python, SQL, Git, Cloud"],
+["JPMorgan Chase","Data Analyst","SQL, Python, Excel, Statistics"],
+["Goldman Sachs","Software Developer","Java, Python, SQL, Data Structures"],
+["Morgan Stanley","Software Developer","Java, Python, SQL, Cloud, Git"],
+["Deloitte","Data Analyst","SQL, Excel, Power BI, Data Visualization"],
+["EY","Business Analyst","SQL, Excel, Business Analysis, Communication"],
+["KPMG","Data Analyst","SQL, Excel, Statistics, Data Visualization"],
+["PwC","Cybersecurity Analyst","Cybersecurity, Networking, Linux, SIEM"],
+["CRED","Backend Developer","Java, Python, APIs, SQL, Cloud"],
+["Swiggy","Software Developer","Java, Python, SQL, Data Structures, Cloud"],
+["Zomato","Software Developer","Java, Python, SQL, APIs, Cloud"],
+["Uber","Software Engineer","Java, Python, Data Structures, Algorithms, Cloud"],
+["Wells Fargo","Software Developer","Java, Python, SQL, Cloud, Git"],
+["HSBC","Cybersecurity Analyst","Cybersecurity, Networking, Linux, SIEM"],
+["Mastercard","Software Developer","Java, Python, APIs, SQL, Cybersecurity"],
+["Visa","Software Developer","Java, Python, APIs, SQL, Cybersecurity"]
+];
+
+let state={profile:null,selectedSkills:[],scores:{},finalScores:{},profileSaved:false};
+let profileEditMode=false;
+
+function $(id){return document.getElementById(id)}
+function screens(){return document.querySelectorAll(".screen")}
+function show(id){
+  screens().forEach(s=>s.classList.remove("active"));
+  $(id).classList.add("active");
+  window.scrollTo({top:0,behavior:"smooth"});
+  render();
+}
+function load(){
+  try{
+    const saved=JSON.parse(localStorage.getItem("skillbridgeFresh"));
+    if(saved && saved.profile){state=saved; updateHeader(); show("menuScreen");}
+  }catch(e){}
+}
+function persist(){
+  try{localStorage.setItem("skillbridgeFresh",JSON.stringify(state));}catch(e){}
+}
+function updateHeader(){
+  $("profileChip").textContent=state.profile?("Student: "+state.profile.name):"";
+}
+function openProfileEdit(){
+  if(!state.profile)return;
+  profileEditMode=true;
+  $("name").value=state.profile.name||"";
+  $("education").value=state.profile.education||"";
+  $("careerGoal").value=state.profile.goal||"";
+  $("goalDetails").value=state.profile.details||"";
+  $("profileError").style.display="none";
+  $("profileSubmitBtn").textContent="Update Profile & Continue →";
+  $("profileCancelBtn").style.display="inline-block";
+  show("profileScreen");
+}
+function cancelProfileEdit(){
+  profileEditMode=false;
+  $("profileSubmitBtn").textContent="Save Profile & Continue →";
+  $("profileCancelBtn").style.display="none";
+  $("profileError").style.display="none";
+  if(state.profile)show("menuScreen");
+}
+function profileSubmit(e){
+  e.preventDefault();
+  const name=$("name").value.trim(), education=$("education").value.trim(), goal=$("careerGoal").value;
+  const err=$("profileError");
+  if(!name){err.textContent="Please enter your full name.";err.style.display="block";$("name").focus();return}
+  if(!education){err.textContent="Please enter your education / branch.";err.style.display="block";$("education").focus();return}
+  if(!goal){err.textContent="Please select your career goal.";err.style.display="block";$("careerGoal").focus();return}
+  err.style.display="none";
+  const oldGoal=state.profile?state.profile.goal:null;
+  state.profile={name,education,goal,details:$("goalDetails").value.trim()};
+  // Keep the student's verified progress when only profile details change.
+  // If the career goal changes, reset skill progress because the required skill set changes.
+  if(profileEditMode && oldGoal && oldGoal!==goal){
+    state.selectedSkills=[]; state.scores={}; state.finalScores={};
+  }else if(!profileEditMode){
+    state.selectedSkills=[]; state.scores={}; state.finalScores={};
+  }
+  state.profileSaved=true;
+  profileEditMode=false;
+  $("profileSubmitBtn").textContent="Save Profile & Continue →";
+  $("profileCancelBtn").style.display="none";
+  persist(); updateHeader(); render();
+  show("menuScreen");
+}
+function renderMenu(){
+  if(!state.profile)return;
+  $("welcomeTitle").textContent="Welcome, "+state.profile.name+" 👋";
+}
+function renderStudent(){
+  if(!state.profile)return;
+  const required=careerSkills[state.profile.goal]||[];
+  $("studentSummary").innerHTML="<strong>Career Goal:</strong> "+state.profile.goal+"<br><span class='small'>"+(state.profile.details||"")+"</span>";
+  $("skillSelector").innerHTML=required.map(s=>{
+    const checked=state.selectedSkills.includes(s)?"checked":"";
+    const score=state.scores[s];
+    return `<label class="skill"><strong><input type="checkbox" value="${s.replaceAll('"','&quot;')}" ${checked}> ${s}</strong><span class="score">${score!==undefined?"Verified score: "+score+"%":"Not assessed yet"}</span></label>`;
+  }).join("");
+  renderAssessment(); renderGap(); renderLearning(); renderFinal();
+}
+function saveSkills(){
+  state.selectedSkills=[...$("skillSelector").querySelectorAll("input:checked")].map(x=>x.value);
+  persist(); renderStudent();
+  $("skillSaveMsg").innerHTML='<div class="success">✓ Current skills saved. Remember: they still need assessment for verification.</div>';
+}
+const questions={
+Python:[
+["What is the output of len([10,20,30])?","3",["2","3","4","Error"]],
+["Which structure stores key-value pairs?","dict",["list","tuple","dict","set"]],
+["What does a function return when it reaches return 5?","5",["None","0","5","True"]]
+],
+Java:[
+["Which keyword creates an object?","new",["class","new","this","void"]],
+["Which concept allows one class to acquire another class's properties?","Inheritance",["Encapsulation","Inheritance","Overloading","Casting"]],
+["Which collection does not allow duplicate elements?","Set",["List","Map","Set","ArrayList"]]
+],
+SQL:[
+["Which clause filters rows before grouping?","WHERE",["ORDER BY","WHERE","HAVING","GROUP BY"]],
+["Which command adds new rows?","INSERT",["UPDATE","INSERT","ALTER","CREATE"]],
+["Which keyword removes duplicate rows from SELECT results?","DISTINCT",["UNIQUE","DISTINCT","ONLY","FILTER"]]
+],
+Git:[
+["Which command creates a local repository?","git init",["git start","git init","git repo","git create"]],
+["Which command records staged changes?","git commit",["git push","git add","git commit","git save"]],
+["Which command downloads remote commits?","git pull",["git fetchall","git pull","git cloneall","git download"]]
+],
+"HTML/CSS":[
+["Which HTML element creates a hyperlink?","a",["link","a","href","url"]],
+["Which CSS property changes text color?","color",["font","text-color","color","foreground"]],
+["Which selector targets an element by id?","#id",[".id","#id","*id","id()"]]
+],
+JavaScript:[
+["Which keyword declares a block-scoped variable?","let",["var","let","define","constvar"]],
+["Which method converts JSON text into an object?","JSON.parse",["JSON.toObject","JSON.parse","JSON.read","parse.JSON"]],
+["Which operator checks strict equality?","===",["=","==","===","!="]]
+],
+"Machine Learning":[
+["Which task predicts a continuous value?","Regression",["Classification","Regression","Clustering","Ranking"]],
+["What is used to measure classification accuracy?","Accuracy",["Accuracy","RMSE","MAE","R-squared"]],
+["Which method reduces overfitting by penalizing complexity?","Regularization",["Normalization","Regularization","Encoding","Sampling"]]
+],
+Cloud:[
+["Which model provides virtual machines over the internet?","IaaS",["SaaS","PaaS","IaaS","DBaaS"]],
+["What does auto-scaling do?","Adjusts resources based on demand",["Deletes data","Adjusts resources based on demand","Encrypts passwords","Compiles code"]],
+["Which is a container platform?","Kubernetes",["Excel","Kubernetes","Figma","Photoshop"]]
+]
+};
+function questionSet(skill){
+  return questions[skill]||[
+    ["Which approach best demonstrates practical skill?","Build and test a project",["Only read notes","Build and test a project","Memorize definitions","Skip practice"]],
+    ["What is a good debugging practice?","Reproduce and isolate the issue",["Guess randomly","Ignore logs","Reproduce and isolate the issue","Delete the project"]],
+    ["How should a new technical concept be strengthened?","Practice with examples",["Avoid practice","Practice with examples","Only memorize","Never test"]]
+  ];
+}
+function renderAssessment(){
+  if(Object.keys(state.scores).length){
+    const avg=Object.values(state.scores).reduce((a,b)=>a+b,0)/Object.values(state.scores).length;
+    $("assessmentBox").innerHTML=`<div class="success">Assessment completed. Verified skills: ${Object.keys(state.scores).length}. Average verified score: ${Math.round(avg)}%.</div>`;
+  }else{
+    $("assessmentBox").innerHTML='<div class="notice">No verified skills yet. Start the assessment.</div>';
+  }
+}
+function startAssessment(finalMode=false){
+  const required=careerSkills[state.profile.goal]||[];
+
+  // IMPORTANT:
+  // First assessment = ONLY skills selected by the student.
+  // Final assessment = all required skills that are still below 70%.
+  const pool = finalMode
+    ? required.filter(s=>getVerified(s)<70)
+    : state.selectedSkills.filter(s=>required.includes(s));
+
+  const title=finalMode?"Final Skill Test":"Skill Verification Assessment";
+  const box=finalMode?$("finalBox"):$("assessmentBox");
+
+  if(!pool.length){
+    box.innerHTML = finalMode
+      ? '<div class="success">There are no remaining skill gaps. You are ready for the opportunities stage.</div>'
+      : '<div class="notice">Please select at least one current skill and save it before starting the first assessment.</div>';
+    return;
+  }
+
+  box.innerHTML=`<h4>${title}</h4>
+  <div class="notice small">${finalMode
+    ? "Final assessment covers required skills that are still below the 70% SkillBridge benchmark."
+    : "First assessment covers ONLY the skills you selected as your current skills. Unselected skills are NOT tested now."
+  }</div>`+
+  pool.map((skill,i)=>{
+    const qs=questionSet(skill);
+    return `<div class="resource"><strong>${i+1}. ${skill}</strong>`+
+      qs.map((q,j)=>`<div style="margin-top:12px">
+        <div class="small"><b>${j+1}.</b> ${q[0]}</div>`+
+        q[2].map(opt=>`<label style="display:block;margin:6px 0">
+          <input type="radio" name="${finalMode?'f':'a'}_${i}_${j}" value="${opt.replaceAll('"','&quot;')}"> ${opt}
+        </label>`).join("")+
+      `</div>`).join("")+
+    `</div>`;
+  }).join("")+
+  `<div class="actions"><button id="${finalMode?'submitFinal':'submitAssessment'}" class="btn ${finalMode?'btn-green':'btn-purple'}" type="button">Submit ${title}</button></div>`;
+
+  $(finalMode?"submitFinal":"submitAssessment").addEventListener("click",()=>submitTest(pool,finalMode));
+}
+
+function submitTest(pool,finalMode){
+  const result={}; let missing=false;
+  pool.forEach((skill,i)=>{
+    const qs=questionSet(skill); let correct=0;
+    qs.forEach((q,j)=>{
+      const chosen=document.querySelector(`input[name="${finalMode?'f':'a'}_${i}_${j}"]:checked`);
+      if(!chosen){missing=true}
+      else if(chosen.value===q[1])correct++;
+    });
+    result[skill]=Math.round(correct/qs.length*100);
+  });
+  if(missing){alert("Please answer all questions before submitting.");return}
+  if(finalMode)state.finalScores={...state.finalScores,...result};
+  else state.scores={...state.scores,...result};
+  persist(); render();
+  if(finalMode){
+    persist();
+    const required=careerSkills[state.profile.goal]||[];
+    const passed=required.length>0 && required.every(s=>state.finalScores[s]!==undefined && Number(state.finalScores[s])>=70);
+    $("finalBox").innerHTML=passed
+      ? '<div class="success"><strong>🎉 100% Skill Readiness achieved!</strong><br>Every career-required skill has met the 70% SkillBridge benchmark.<br><br>💼 Jobs & Internships are now unlocked.</div>'
+      : '<div class="notice">Final test submitted. Some required skills are still below the 70% SkillBridge benchmark. Improve those skills and take the Final Test again.</div>';
+    renderJobs();
+  }else{
+    $("assessmentBox").innerHTML='<div class="success">✓ Assessment submitted. Your scores are now verified for SkillBridge gap analysis.</div>';
+  }
+}
+function getVerified(skill){
+  return state.finalScores[skill]!==undefined?state.finalScores[skill]:(state.scores[skill]!==undefined?state.scores[skill]:0);
+}
+function getGaps(){
+  const required=careerSkills[state.profile.goal]||[];
+  const gaps={};
+  required.forEach(s=>{const gap=Math.max(70-getVerified(s),0);if(gap>0)gaps[s]=gap});
+  return gaps;
+}
+function renderGap(){
+  const required=careerSkills[state.profile.goal]||[];
+  $("gapBox").innerHTML=`<table class="table"><tr><th>Required Skill</th><th>Verified Score</th><th>Benchmark</th><th>Gap</th></tr>`+
+    required.map(s=>{const sc=getVerified(s),gap=Math.max(70-sc,0);return `<tr><td>${s}</td><td>${sc}%</td><td>70%</td><td><span class="badge">${gap?gap+"% gap":"Ready"}</span></td></tr>`}).join("")+"</table>";
+}
+const resources={
+Python:[["YouTube","https://www.youtube.com/results?search_query=python+full+course"],["Coursera","https://www.coursera.org/search?query=python"],["freeCodeCamp","https://www.freecodecamp.org/learn/"],["edX","https://www.edx.org/learn/python"]],
+SQL:[["YouTube","https://www.youtube.com/results?search_query=sql+full+course"],["Coursera","https://www.coursera.org/search?query=sql"],["Udemy","https://www.udemy.com/courses/search/?q=sql"]],
+Git:[["YouTube","https://www.youtube.com/results?search_query=git+github+course"],["Coursera","https://www.coursera.org/search?query=git"],["freeCodeCamp","https://www.freecodecamp.org/learn/"]],
+Java:[["YouTube","https://www.youtube.com/results?search_query=java+full+course"],["Coursera","https://www.coursera.org/search?query=java"],["Udemy","https://www.udemy.com/courses/search/?q=java"]],
+JavaScript:[["YouTube","https://www.youtube.com/results?search_query=javascript+full+course"],["freeCodeCamp","https://www.freecodecamp.org/learn/javascript-algorithms-and-data-structures-v8/"],["Coursera","https://www.coursera.org/search?query=javascript"]],
+"HTML/CSS":[["YouTube","https://www.youtube.com/results?search_query=html+css+full+course"],["freeCodeCamp","https://www.freecodecamp.org/learn/2022/responsive-web-design/"],["Coursera","https://www.coursera.org/search?query=html%20css"]],
+"Machine Learning":[["YouTube","https://www.youtube.com/results?search_query=machine+learning+course"],["Coursera","https://www.coursera.org/search?query=machine%20learning"],["edX","https://www.edx.org/learn/machine-learning"]],
+Cloud:[["YouTube","https://www.youtube.com/results?search_query=cloud+computing+course"],["AWS Skill Builder","https://skillbuilder.aws/"],["Coursera","https://www.coursera.org/search?query=cloud%20computing"]]
+};
+function renderLearning(){
+  const gaps=getGaps();
+  const keys=Object.keys(gaps);
+  if(!keys.length){$("learningBox").innerHTML='<div class="success">No current skill gaps. Learning recommendations are not needed.</div>';return}
+  $("learningBox").innerHTML=keys.map(s=>{
+    const rs=resources[s]||[];
+    return `<div class="resource"><strong>${s}</strong> — ${gaps[s]}% gap`+
+      (rs.length?rs.map(r=>`<div style="margin-top:7px"><a href="${r[1]}" target="_blank" rel="noopener">${r[0]} →</a></div>`).join(""):"<div class='small' style='margin-top:7px'>Resource mapping can be added for this skill.</div>")+"</div>";
+  }).join("");
+}
+function renderFinal(){
+  const gaps=getGaps();
+  $("finalBox").innerHTML=Object.keys(state.finalScores).length
+    ? (Object.keys(gaps).length?'<div class="notice">Final test completed. Some skills still need improvement.</div>':'<div class="success"><strong>100% Skill Readiness achieved!</strong><br>All required skills meet the SkillBridge benchmark.</div>')
+    : '<div class="notice">Final test becomes meaningful after your initial assessment and learning.</div>';
+}
+function renderAcademic(){
+  const required=careerSkills[state.profile.goal]||[];
+  const rows=required.map(s=>{
+    const d=demand[s]??70, st=getVerified(s), gap=Math.max(d-st,0);
+    return {s,d,st,gap};
+  }).sort((a,b)=>b.gap-a.gap);
+  $("demandTable").innerHTML=`<table class="table"><tr><th>Skill</th><th>Industry Demand</th><th>Student Verified</th><th>Priority Gap</th></tr>`+
+    rows.map(r=>`<tr><td>${r.s}</td><td>${r.d}%</td><td>${r.st}%</td><td><span class="badge">${r.gap}%</span></td></tr>`).join("")+"</table>";
+  const top=rows.filter(r=>r.gap>0).slice(0,5);
+  $("workshops").innerHTML=top.length?top.map((r,i)=>`<div class="resource"><strong>${i+1}. ${r.s}</strong><br><span class="small">Suggested: 2–4 hour faculty/industry workshop + hands-on lab + mini-project + post-workshop assessment.</span><br><span class="badge">Priority ${r.gap}%</span></div>`).join(""):'<div class="success">No priority gaps detected for the current verified profile.</div>';
+}
+function finalPassed(){
+  const required=careerSkills[state.profile.goal]||[];
+  if(!required.length) return false;
+  return required.every(s=>state.finalScores[s]!==undefined && Number(state.finalScores[s])>=70);
+}
+function renderJobs(){
+  const box=$("jobsScreen");
+  const ready=finalPassed();
+
+  if(!ready){
+    $("readinessNotice").innerHTML=
+      "🔒 Jobs & Internships are locked. Complete the Final Test and score at least 70% in EVERY career-required skill to unlock opportunities.";
+    $("googleJobs").style.pointerEvents="none";
+    $("googleJobs").style.opacity=".45";
+    $("linkedinJobs").style.pointerEvents="none";
+    $("linkedinJobs").style.opacity=".45";
+  }else{
+    $("readinessNotice").innerHTML=
+      "🎉 <strong>100% Skill Readiness achieved!</strong> You met the SkillBridge assessment benchmark for every required skill. Jobs & Internships are now unlocked.";
+    const q=encodeURIComponent(state.profile.goal+" internships jobs India");
+    $("googleJobs").href="https://www.google.com/search?q="+q;
+    $("linkedinJobs").href="https://www.linkedin.com/jobs/search/?keywords="+encodeURIComponent(state.profile.goal);
+    $("googleJobs").style.pointerEvents="auto";
+    $("googleJobs").style.opacity="1";
+    $("linkedinJobs").style.pointerEvents="auto";
+    $("linkedinJobs").style.opacity="1";
+  }
+}
+function renderIndustry(){
+  const q=$("industrySearch").value.toLowerCase();
+  const list=employers.filter(x=>(x[0]+" "+x[1]+" "+x[2]).toLowerCase().includes(q));
+  $("industryTable").innerHTML=`<table class="table"><tr><th>Company</th><th>Job / Role</th><th>Required Skills</th></tr>`+
+    list.map(x=>`<tr><td><strong>${x[0]}</strong></td><td>${x[1]}</td><td>${x[2]}</td></tr>`).join("")+"</table>";
+}
+function render(){
+  renderMenu(); renderStudent(); renderAcademic(); renderJobs(); renderIndustry();
+}
+document.addEventListener("DOMContentLoaded",function(){
+  $("profileForm").addEventListener("submit",profileSubmit);
+  $("editProfileBtn").addEventListener("click",openProfileEdit);
+  $("profileCancelBtn").addEventListener("click",cancelProfileEdit);
+  $("saveSkills").addEventListener("click",saveSkills);
+  $("startAssessment").addEventListener("click",()=>startAssessment(false));
+  $("startFinal").addEventListener("click",()=>startAssessment(true));
+  $("industrySearch").addEventListener("input",renderIndustry);
+  document.querySelectorAll("[data-go]").forEach(b=>b.addEventListener("click",function(){
+    const m=b.dataset.go;
+    if(m==="student")show("studentScreen");
+    if(m==="academic")show("academicScreen");
+    if(m==="jobs")show("jobsScreen");
+    if(m==="industry")show("industryScreen");
+  }));
+  document.querySelectorAll("[data-back]").forEach(b=>b.addEventListener("click",()=>show("menuScreen")));
+  updateHeader(); load(); render();
+});
+})();
+</script>
+</body>
+</html>
